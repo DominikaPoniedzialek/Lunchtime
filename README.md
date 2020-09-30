@@ -1,2 +1,2 @@
 # Lunchtime
-Smart app created to optimize your lunchbreaks!
+Smart app created to optimize your lunch breaks!
