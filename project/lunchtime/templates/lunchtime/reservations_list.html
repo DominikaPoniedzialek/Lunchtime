@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="content">
+        <h2 class="content-subhead">Moje rezerwacje:</h2>
+    <ol>
+    {% for reservation in object_list %}
+
+        <li>{{ reservation.restaurant }}
+        <ul>
+        <li>{{ reservation.date }} - {{ reservation.time }}</li>
+        <li>Stolik: {{ reservation.table }}</li>
+
+        </ul>
+        </li>
+        {% if perms.lunchtime.modify_reservation and perms.lunchtime.review_delete %}
+            <button><a href="/modify_reservation/{{ meal.id }}/">Modyfikuj</a></button>
+            <button><a href="/delete_reservation/{{ review.id }}/">Usuń</a></button>
+        {% endif %}
+    {% endfor %}
+    </ol>
+    </div>
+{% endblock %}

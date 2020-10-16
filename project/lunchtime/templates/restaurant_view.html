@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="content">
+        <p>{{ restaurant.logo }}</p>
+        <h1 class="content-subhead">{{ restaurant.name }}</h1>
+
+        <h2 class="content-subhead">Menu:</h2>
+        {% if perms.lunchtime_add_meal %}
+            <button><a href="{% url 'add-meal' %}">Dodaj posiłek do menu</a></button>
+        {% endif %}
+
+        <h3 class="content-subhead">Śniadanie:</h3>
+        {% for meal in menu_breakfast %}
+        <li>{{ meal.name }} - {{ meal.price }} zł</li>
+        <p>{{ meal.description }}</p>
+            {% if perms.lunchtime.change_meal and perms.lunchtime.delete_meal %}
+                <button><a href="/modify_meal/{{ meal.id }}/">Modyfikuj</a></button>
+                <button><a href="/delete_meal/{{ meal.id }}">Usuń</a></button>
+            {% endif %}
+        {% endfor %}
+
+        <h3 class="content-subhead">Lunch:</h3>
+        {% for meal in menu_lunch %}
+        <li>{{ meal.name }} - {{ meal.price }} zł</li>
+        <p>{{ meal.description }}</p>
+            {% if perms.lunchtime.change_meal and perms.lunchtime.delete_meal %}
+                <button><a href="/modify_meal/{{ meal.id }}/">Modyfikuj</a></button>
+                <button><a href="/delete_meal/{{ meal.id }}">Usuń</a></button>
+            {% endif %}
+        {% endfor %}
+
+        <h3 class="content-subhead">Kolacja:</h3>
+        {% for meal in menu_dinner %}
+        <li>{{ meal.name }} - {{ meal.price }} zł</li>
+        <p>{{ meal.description }}</p>
+            {% if perms.lunchtime.change_meal and perms.lunchtime.delete_meal %}
+                <button><a href="/modify_meal/{{ meal.id }}/">Modyfikuj</a></button>
+                <button><a href="/delete_meal/{{ meal.id }}">Usuń</a></button>
+            {% endif %}
+        {% endfor %}
+
+        <h2 class="content-subhead">Recenzje:</h2>
+        {% for review in reviews %}
+        <p>Data: {{ review.date }}</p>
+        <p>Nick: {{ review.user.username }}</p>
+        <p>Ocena: {{ review.rate }}</p>
+        <p>Recenzja: {{ review.review }}</p>
+        {% endfor %}
+
+        {% if perms.lunchtime.add_table and perms.lunchtime.delete_table %}
+        <h2 class="content-subhead">Stoliki:</h2>
+            <button><a href="{% url 'add-table' %}">Dodaj stolik</a></button>
+        {% for table in tables %}
+        <p>Numer stolika: {{ table.id }}</p>
+        <p>{{ table.persons }}-osobowy</p>
+        <button><a href="/delete_table/{{ table.id }}">Usuń</a></button>
+        {% endfor %}
+        {% endif %}
+
+        {% if perms.lunchtime.add_restaurant and perms.lunchtime.delete_restaurant %}
+        <h2 class="content-subhead">Rezerwacje:</h2>
+        <ol>
+        {% for reservation in reservations %}
+        <li>ID rezerwacji: {{ reservation.id }}
+            <ul>
+        <li>Data: {{ reservation.date }}</li>
+        <li>Godzina: {{ reservation.time }}</li>
+            </ul>
+            </li>
+        {% endfor %}
+        </ol>
+        {% endif %}
+    </div>
+{% endblock %}

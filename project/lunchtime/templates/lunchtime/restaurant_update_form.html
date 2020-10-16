@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}
-    {{ form.restaurant.name }}
-    <h3>Dodaj posiłek do menu:</h3>
-{% endblock %}
+
 {% block content %}
+    <div class="content">
+        <h2 class="content-subhead">Modyfikuj restaurację:</h2>
     <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Zapisz">
     </form>
+    </div>
 {% endblock %}

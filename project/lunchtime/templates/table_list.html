@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}
-    <h3>Lista stolików:</h3>
-{% endblock %}
+
 {% block content %}
+    <div class="content">
+        <h2 class="content-subhead">Lista stolików:</h2>
     <ul>
     {% for table in tables %}
-        <li>Stolik {{ table.persons }}-osobowy</li>
+    <li>ID: {{ table.id }} - {{ table.persons }}-osobowy</li>
     {% endfor %}
     </ul>
+    </div>
 {% endblock %}

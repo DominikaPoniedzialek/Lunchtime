@@ -1,6 +1,7 @@
+import datetime
 from django import forms
 from django.contrib.auth.models import User
-from .models import Restaurant, Table, Meal, STARS, CATEGORIES
+from .models import Restaurant, Table, Meal, Reservation, Review
 
 
 class AddUserForm(forms.Form):
@@ -28,40 +29,49 @@ class AddUserForm(forms.Form):
         return password
 
 
-class UserProfileForm(forms.Form):
-    restaurant = forms.CharField(label='restauracja')
+# class UserProfileForm(forms.Form):
+#     restaurant = forms.CharField(label='restauracja')
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label='login', max_length=24)
+    password = forms.CharField(label='hasło', widget=forms.PasswordInput)
 
 
-class AddRestaurantForm(forms.Form):
-    name = forms.CharField(label='nazwa', max_length=64)
-    address = forms.CharField(label='adres', max_length=256)
-    phone = forms.CharField(label='telefon', max_length=20)
-    email = forms.EmailField(label='adres e-mail')
-    description = forms.CharField(label='opis', widget=forms.Textarea)
+class AddRestaurantForm(forms.ModelForm):
+    class Meta:
+        model = Restaurant
+        fields = ['name', 'address', 'phone', 'email', 'description', 'logo']
 
 
 class AddTableForm(forms.Form):
-    persons = forms.IntegerField(label='Ilość gości', min_value=1)
     restaurant = forms.ModelChoiceField(Restaurant.objects.all(), label='restauracja')
+    persons = forms.IntegerField(label='ilość osób przy stoliku', min_value=1)
 
 
-class AddMealForm(forms.Form):
-    category = forms.TypedMultipleChoiceField(label='kategoria', choices=CATEGORIES, coerce=int)
-    name = forms.CharField(label='nazwa', max_length=36)
-    description = forms.CharField(label='opis dania', max_length=264, widget=forms.Textarea)
-    restaurant = forms.ModelChoiceField(Restaurant.objects.all())
-    price = forms.DecimalField(label='cena', min_value=0, max_digits=5, decimal_places=2)
+class AddMealForm(forms.ModelForm):
+    class Meta:
+        model = Meal
+        fields = ['restaurant', 'category', 'name', 'description', 'price']
 
 
 class AddReservationForm(forms.Form):
-    restaurant = forms.ModelChoiceField(Restaurant.objects.all(), label='restauracja')
-    table = forms.ModelChoiceField(Table.objects.filter(restaurant__name=restaurant), label='stolik')
-    date = forms.DateField(label='data', input_formats=['%d.%m.%y'], widget=forms.DateInput)
-    time = forms.TimeField(label='godzina', input_formats=['%h:%m'], widget=forms.TimeInput)
-    meal = forms.ModelChoiceField(Meal.objects.filter(restaurant__name=restaurant), label='posiłek')
+    meal = forms.ModelMultipleChoiceField(Meal.objects.all(), widget=forms.CheckboxSelectMultiple)
+
+    class Meta:
+        model = Reservation
+        fields = ['restaurant', 'table', 'date', 'time', 'meal']
+        widgets = {'meal': forms.CheckboxSelectMultiple}
+
+    def clean_date(self):
+        date_reservation = self.cleaned_data.get('date')
+        if date_reservation:
+            if str(date_reservation) < str(datetime.date.today()):
+                raise forms.ValidationError('Podana data jest z przeszłości')
+        return date_reservation
 
 
-class AddReviewForm(forms.Form):
-    restaurant = forms.ModelChoiceField(Restaurant.objects.all(), label='restauracja')
-    rate = forms.TypedChoiceField(label='ocena', choices=STARS, coerce=int)
-    review = forms.CharField(label='recenzja', widget=forms.Textarea)
+class AddReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['restaurant', 'rate', 'review']
+

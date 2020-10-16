@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+   <div class="content">
+    <h2 class="content-subhead">Modyfikuj posiłek:</h2>
+   <form method="post">
+       {% csrf_token %}
+       {{ form.as_p }}
+       <input type="submit" value="Zapisz">
+   </form>
+   </div>
+{% endblock %}

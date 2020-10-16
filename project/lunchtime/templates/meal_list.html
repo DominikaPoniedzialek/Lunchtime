@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
-{% block title %}
-    <h3>Menu:</h3>
-{% endblock %}
+
 {% block content %}
+    <div class="content">
+        <h2 class="content-subhead">Menu:</h2>
     <ul>
     {% for meal in meals %}
-    <li>{{ meal.name }} - {{ meal.price }}</li>
-        <li>{{ meal.description }}</li>
+    <li>{{ meal.name }} - {{ meal.price }} zł</li>
+        <p>{{ meal.description }}</p>
     {% endfor %}
     </ul>
+    </div>
 {% endblock %}
