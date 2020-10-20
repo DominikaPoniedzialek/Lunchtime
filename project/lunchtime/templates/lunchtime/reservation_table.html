@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="content">
+        <h2 class="content-subhead">Wybierz stolik:</h2>
+    <form method="post">
+        <select name="table_id">
+            <option value="">Wybierz stolik</option>
+            {% for table in available_tables %}
+            <option value="{{ table.id }}">{{ table.persons }}-osobowy</option>
+            {% endfor %}
+        </select>
+            <h2 class="content-subhead">Wybierz menu:</h2>
+            {% for meal in menu %}
+                    <input type="checkbox" value="{{ meal.id }}">
+                    <label>{{ meal.name }} - {{ meal.price }} zł</label><br>
+            {% endfor %}
+
+    <br><input type="submit" value="Zapisz">
+    {% csrf_token %}
+    </form>
+    </div>
+{% endblock %}

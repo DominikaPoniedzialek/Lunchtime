@@ -39,15 +39,14 @@
 <div id="layout">
     <!-- Menu toggle -->
     <a href="#menu" id="menuLink" class="menu-link">
-        <!-- Hamburger icon -->
-        <span></span>
+
     </a>
 {% block menu %}
     <div id="menu">
         <div class="pure-menu">
             <p class="pure-menu-heading"><a href="{% url 'main-page' %}" class="pure-menu-link">LunchTime!</a></p>
             {% if user.is_authenticated %}
-                <p class="pure-menu-item"><a href="{% url 'add-reservation' %}" class="pure-menu-link">Zarezerwuj stolik</a></p>
+                <p class="pure-menu-item"><a href="{% url 'select-date-time' %}" class="pure-menu-link">Zarezerwuj stolik</a></p>
                 <p class="pure-menu-item"><a href="{% url 'reservations-list' %}" class="pure-menu-link">Moje rezerwacje</a></p>
                 <p class="pure-menu-item"><a href="{% url 'add-review' %}" class="pure-menu-link">Dodaj recenzję</a></p>
                 <p class="pure-menu-item"><a href="{% url 'reviews-list' %}" class="pure-menu-link">Moje recenzje</a></p>
@@ -55,7 +54,11 @@
             {% else %}
                 <p class="pure-menu-item"><a href="{% url 'login-user' %}" class="pure-menu-link">Zaloguj</a></p>
             {% endif %}
+
             <p class="pure-menu-item"><a href="{% url 'add-user' %}" class="pure-menu-link">Załóż konto</a></p>
+            {% if perms.lunchtime.add_restaurant %}
+                <p class="pure-menu-item"><a href="{% url 'add-restaurant' %}" class="pure-menu-link">Dodaj restaurację</a></p>
+            {% endif %}
             <p class="pure-menu-item"><a href="{% url 'restaurants-list' %}" class="pure-menu-link">Restauracje</a></p>
             <p class="pure-menu-item"><a href="{% url 'contact' %}" class="pure-menu-link">Kontakt</a></p>
 
@@ -76,7 +79,9 @@
         <div class="content">
             <h2 class="content-subhead">Czas na lunch!</h2>
             <p>
-                LunchTime! to aplikacja, która skraca czas oczekiwania na posiłek do minimum. Nie musisz się martwić kolejkami do najpopularniejszych miejsc. Wystarczy zarejestrować się w naszym serwisie i dodać rezerwację. Do dzieła!
+                LunchTime! to aplikacja, która skraca czas oczekiwania na posiłek do minimum. Nie musisz się martwić
+                kolejkami do najpopularniejszych miejsc. Wystarczy zarejestrować się w naszym serwisie i dodać
+                rezerwację. Do dzieła!
             </p>
 
 

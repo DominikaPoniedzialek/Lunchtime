@@ -16,11 +16,12 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from lunchtime.views import LandingPageView, AddUserView, AddRestaurantView, ModifyRestaurantView, ListRestaurantView, \
-    DeleteRestaurantView, RestaurantView, ListTableView, AddTableView, DeleteTableView, AddMealView, ModifyMealView, \
-    DeleteMealView, AddReservationView, ListReservationView, ModifyReservationView, DeleteReservationView, \
-    ListReviewsView, AddReviewView, DeleteReviewView, ContactPageView, LoginView, LogoutView
+    DeleteRestaurantView, RestaurantView, AddTableView, DeleteTableView, AddMealView, ModifyMealView, \
+    DeleteMealView, SelectRestaurantView, AddReservationView, ListReservationView, ModifyReservationView, \
+    DeleteReservationView, ListReviewsView, AddReviewView, DeleteReviewView, ContactPageView, LoginView, LogoutView, \
+    SelectDateAndTimeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,17 +35,18 @@ urlpatterns = [
     path('modify_restaurant/<int:pk>/', ModifyRestaurantView.as_view(), name='modify-restaurant'),
     path('delete_restaurant/<int:pk>/', DeleteRestaurantView.as_view(), name='delete-restaurant'),
     path('restaurant/<int:restaurant_id>/', RestaurantView.as_view(), name='restaurant-detail'),
-    path('table_list/<int:restaurant_id>/', ListTableView.as_view(), name='tables-list'),
     path('add_table/', AddTableView.as_view(), name='add-table'),
     path('delete_table/<int:pk>/', DeleteTableView.as_view(), name='delete-table'),
     path('add_meal/', AddMealView.as_view(), name='add-meal'),
     path('modify_meal/<int:pk>/', ModifyMealView.as_view(), name='modify-meal'),
     path('delete_meal/<int:pk>/', DeleteMealView.as_view(), name='delete-meal'),
     path('reservation_list/', ListReservationView.as_view(), name='reservations-list'),
-    path('add_reservation/', AddReservationView.as_view(), name='add-reservation'),
+    path('select_date_time', SelectDateAndTimeView.as_view(), name='select-date-time'),
+    re_path(r'select_restaurant/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/', SelectRestaurantView.as_view(), name='select-restaurant'),
+    re_path(r'add_reservation/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/(?P<restaurant_id>\d+)/', AddReservationView.as_view(), name='add-reservation'),
     path('modify_reservation/<int:pk>/', ModifyReservationView.as_view(), name='modify-reservation'),
     path('delete_reservation/<int:pk>/', DeleteReservationView.as_view(), name='delete-reservation'),
+    path('review_list/', ListReviewsView.as_view(), name='reviews-list'),
     path('add_review/', AddReviewView.as_view(), name='add-review'),
     path('delete_review/<int:pk>/', DeleteReviewView.as_view(), name='delete-review'),
-    path('review_list/', ListReviewsView.as_view(), name='reviews-list'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

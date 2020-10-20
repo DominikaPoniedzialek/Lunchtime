@@ -3,7 +3,7 @@
 {% block content %}
     <div class="content">
         <h2 class="content-subhead">Modyfikuj restaurację:</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Zapisz">

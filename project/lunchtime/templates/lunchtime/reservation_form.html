@@ -2,11 +2,11 @@
 
 {% block content %}
     <div class="content">
-        <h2 class="content-subhead">Dodaj rezerwację:</h2>
+        <h2 class="content-subhead">Wybierz datę i godzinę rezerwacji:</h2>
     <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Zapisz">
+    <input type="submit" value="Wybierz">
     </form>
     </div>
 {% endblock %}

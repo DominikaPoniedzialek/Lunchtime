@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% load static %}
     <div class="content">
-        <p>{{ restaurant.logo }}</p>
+    <div class="pure-u-1-4">
+        <img class="logo" src="{{ restaurant.logo.url }}" alt="logo">
+    </div>
         <h1 class="content-subhead">{{ restaurant.name }}</h1>
+        <p>Adres: {{ restaurant.address }}</p>
+        <p>Telefon: {{ restaurant.phone }}</p>
+        <p>E-mail: {{ restaurant.email }}</p>
+        <h3>{{ restaurant.description }}</h3>
+
+        {% if perms.lunchtime.modify_restaurant and perms.lunchtime.delete_restaurant %}
+            <button><a href="/modify_restaurant/{{ restaurant.id }}/">Modyfikuj</a></button>
+            <button><a href="/delete_restaurant/{{ restaurant.id }}/">Usuń</a></button>
+        {% endif %}
 
         <h2 class="content-subhead">Menu:</h2>
         {% if perms.lunchtime_add_meal %}
             <button><a href="{% url 'add-meal' %}">Dodaj posiłek do menu</a></button>
         {% endif %}
 
-        <h3 class="content-subhead">Śniadanie:</h3>
+        <h3>Śniadanie:</h3>
         {% for meal in menu_breakfast %}
         <li>{{ meal.name }} - {{ meal.price }} zł</li>
         <p>{{ meal.description }}</p>
@@ -20,7 +32,7 @@
             {% endif %}
         {% endfor %}
 
-        <h3 class="content-subhead">Lunch:</h3>
+        <h3>Lunch:</h3>
         {% for meal in menu_lunch %}
         <li>{{ meal.name }} - {{ meal.price }} zł</li>
         <p>{{ meal.description }}</p>
@@ -30,7 +42,7 @@
             {% endif %}
         {% endfor %}
 
-        <h3 class="content-subhead">Kolacja:</h3>
+        <h3>Kolacja:</h3>
         {% for meal in menu_dinner %}
         <li>{{ meal.name }} - {{ meal.price }} zł</li>
         <p>{{ meal.description }}</p>
@@ -38,14 +50,6 @@
                 <button><a href="/modify_meal/{{ meal.id }}/">Modyfikuj</a></button>
                 <button><a href="/delete_meal/{{ meal.id }}">Usuń</a></button>
             {% endif %}
-        {% endfor %}
-
-        <h2 class="content-subhead">Recenzje:</h2>
-        {% for review in reviews %}
-        <p>Data: {{ review.date }}</p>
-        <p>Nick: {{ review.user.username }}</p>
-        <p>Ocena: {{ review.rate }}</p>
-        <p>Recenzja: {{ review.review }}</p>
         {% endfor %}
 
         {% if perms.lunchtime.add_table and perms.lunchtime.delete_table %}
@@ -71,5 +75,13 @@
         {% endfor %}
         </ol>
         {% endif %}
+
+        <h2 class="content-subhead">Recenzje:</h2>
+        {% for review in reviews %}
+        <p>Data: {{ review.date }}</p>
+        <p>Nick: {{ review.user.username }}</p>
+        <p>Ocena: {{ review.rate }}</p>
+        <p>Recenzja: {{ review.review }}</p>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -2,10 +2,12 @@
 
 {% block content %}
     <div class="content">
-        <h2 class="content-subhead">Restauracje:</h2>
+        <h1 class="content-subhead">Restauracje:</h1>
     {% for restaurant in object_list %}
-
-        <p><a class="content-subhead" href="/restaurant/{{ restaurant.id }}/">{{ restaurant.name }}</a></p>
+    <div class="pure-u-1-4">
+        <img class="logo-list" src="{{ restaurant.logo.url }}" alt="logo">
+    </div>
+        <h2><a class="content-subhead" href="/restaurant/{{ restaurant.id }}/">{{ restaurant.name }}</a></h2>
     {% endfor %}
     </div>
 {% endblock %}
