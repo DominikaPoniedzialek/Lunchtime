@@ -3,6 +3,7 @@
 {% block content %}
     <div class="content">
         <h2 class="content-subhead">Moje recenzje:</h2>
+    {% if user.is_authenticated %}
     <ol>
     {% for review in object_list %}
 
@@ -13,10 +14,10 @@
 
         </ul>
         </li>
-        {% if perms.lunchtime.review_delete %}
             <button><a href="/delete_review/{{ review.id }}/">Usuń</a></button>
-        {% endif %}
+
     {% endfor %}
+    {% endif %}
     </ol>
     </div>
 {% endblock %}

@@ -11,13 +11,14 @@
         <ul>
         <li>{{ reservation.date }} - {{ reservation.time }}</li>
         <li>Stolik: {{ reservation.table }}</li>
-
+        <ul>Danie z menu:
+            {% for meal in reservation.meal.all %}
+            <li>{{ meal.name }}</li>
+            {% endfor %}
+            </ul>
         </ul>
         </li>
-        {% if perms.lunchtime.modify_reservation and perms.lunchtime.review_delete %}
-            <button><a href="/modify_reservation/{{ meal.id }}/">Modyfikuj</a></button>
-            <button><a href="/delete_reservation/{{ review.id }}/">Usuń</a></button>
-        {% endif %}
+            <button><a href="/delete_reservation/{{ reservation.id }}/">Usuń</a></button>
     {% endfor %}
     {% endif %}
     </ol>

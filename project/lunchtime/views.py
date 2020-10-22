@@ -1,17 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 
 from .models import Restaurant, Table, Meal, Reservation, Review
 from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView, View, UpdateView, CreateView, DeleteView
-from .forms import AddUserForm, AddRestaurantForm, AddTableForm, AddMealForm,  AddReviewForm, \
-    LoginForm, SelectRestaurantForm, SelectDateAndTimeForm
-# AddReservationForm,
+from .forms import AddUserForm, AddTableForm, LoginForm, SelectRestaurantForm, SelectDateAndTimeForm
 
 
 # Create your views here.
@@ -52,7 +47,7 @@ class LoginView(FormView):
     """Allows user to log in to application."""
     template_name = 'login.html'
     form_class = LoginForm
-    success_url = '/'
+    success_url = reverse_lazy('main-page')
 
     def form_valid(self, form):
         user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
@@ -177,7 +172,7 @@ class SelectDateAndTimeView(LoginRequiredMixin, View):
     """Allows user to select date and time of reservation."""
     def get(self, request):
         """Return form to select date and time."""
-        form = SelectDateAndTimeForm
+        form = SelectDateAndTimeForm()
         return render(request, 'lunchtime/reservation_form.html', {'form': form})
 
     def post(self, request):
@@ -195,7 +190,7 @@ class SelectRestaurantView(LoginRequiredMixin, View):
 
     def get(self, request, date, time):
         """Return form to select restaurant."""
-        form = SelectRestaurantForm
+        form = SelectRestaurantForm()
         return render(request, 'select_restaurant.html', {'form': form})
 
     def post(self, request, date, time):
@@ -221,12 +216,11 @@ class AddReservationView(LoginRequiredMixin, View):
 
     def post(self, request, date, time, restaurant_id):
         table_id = request.POST.get('table_id')
-        # meal = Meal.objects.filter(request.POST.get('meal_id'))
-        # date = request.POST.get('date')
-        # time = request.POST.get('time')
+        meals = Meal.objects.filter(id__in=request.POST.getlist('meals'))
         user = self.request.user
-        Reservation.objects.create(restaurant_id=restaurant_id, table_id=table_id, date=date,
-                                   time=time, meal=meal, user=user)
+        new_reservation = Reservation.objects.create(restaurant_id=restaurant_id, table_id=table_id, date=date,
+                                                     time=time, user=user)
+        new_reservation.meal.set(meals)
         table = Table.objects.get(pk=table_id)
         table.reserved = True
         table.save()
@@ -249,12 +243,12 @@ class AddReservationView(LoginRequiredMixin, View):
 #             return self.form_invalid(form)
 
 
-class ModifyReservationView(LoginRequiredMixin, UpdateView):
-    """Modify reservation details."""
-    model = Reservation
-    fields = ['restaurant', 'table', 'date', 'time', 'meal']
-    template_name_suffix = '_update_form'
-    success_url = reverse_lazy('reservations-list')
+# class ModifyReservationView(LoginRequiredMixin, UpdateView):
+#     """Modify reservation details."""
+#     model = Reservation
+#     fields = ['restaurant', 'table', 'date', 'time', 'meal']
+#     template_name_suffix = '_update_form'
+#     success_url = reverse_lazy('reservations-list')
 
 
 class DeleteReservationView(LoginRequiredMixin, DeleteView):

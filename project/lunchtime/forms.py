@@ -29,7 +29,7 @@ class AddUserForm(forms.Form):
         if password1 and password2:
             if password1 != password2:
                 raise forms.ValidationError("Podane hasła nie są takie same.")
-        return password2
+        return password1
 
 
 class LoginForm(forms.Form):

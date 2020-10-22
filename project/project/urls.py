@@ -19,8 +19,8 @@ from django.contrib import admin
 from django.urls import path, re_path
 from lunchtime.views import LandingPageView, AddUserView, AddRestaurantView, ModifyRestaurantView, ListRestaurantView, \
     DeleteRestaurantView, RestaurantView, AddTableView, DeleteTableView, AddMealView, ModifyMealView, \
-    DeleteMealView, SelectRestaurantView, AddReservationView, ListReservationView, ModifyReservationView, \
-    DeleteReservationView, ListReviewsView, AddReviewView, DeleteReviewView, ContactPageView, LoginView, LogoutView, \
+    DeleteMealView, SelectRestaurantView, AddReservationView, ListReservationView, DeleteReservationView, \
+    ListReviewsView, AddReviewView, DeleteReviewView, ContactPageView, LoginView, LogoutView, \
     SelectDateAndTimeView
 
 urlpatterns = [
@@ -41,10 +41,10 @@ urlpatterns = [
     path('modify_meal/<int:pk>/', ModifyMealView.as_view(), name='modify-meal'),
     path('delete_meal/<int:pk>/', DeleteMealView.as_view(), name='delete-meal'),
     path('reservation_list/', ListReservationView.as_view(), name='reservations-list'),
-    path('select_date_time', SelectDateAndTimeView.as_view(), name='select-date-time'),
-    re_path(r'select_restaurant/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/', SelectRestaurantView.as_view(), name='select-restaurant'),
+    path('select_date_time/', SelectDateAndTimeView.as_view(), name='select-date-time'),
+    re_path(r'select_restaurant/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/',
+            SelectRestaurantView.as_view(), name='select-restaurant'),
     re_path(r'add_reservation/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/(?P<restaurant_id>\d+)/', AddReservationView.as_view(), name='add-reservation'),
-    path('modify_reservation/<int:pk>/', ModifyReservationView.as_view(), name='modify-reservation'),
     path('delete_reservation/<int:pk>/', DeleteReservationView.as_view(), name='delete-reservation'),
     path('review_list/', ListReviewsView.as_view(), name='reviews-list'),
     path('add_review/', AddReviewView.as_view(), name='add-review'),
