@@ -27,8 +27,8 @@ class Restaurant(models.Model):
     phone = models.CharField(verbose_name='telefon', max_length=20)
     email = models.EmailField(verbose_name='adres e-mail', max_length=64)
     description = models.TextField(verbose_name='opis')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='przedstawiciel restauracji', default=True)
-    logo = models.ImageField(verbose_name='logo', upload_to='media/')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='przedstawiciel restauracji')
+    logo = models.ImageField(verbose_name='logo', upload_to='media/', null=True, blank=True)
 
     def __str__(self):
         """Return name of restaurant."""
@@ -36,7 +36,7 @@ class Restaurant(models.Model):
 
     def get_absolute_url(self):
         """Return url for restaurant object."""
-        return reverse('restaurant-detail', kwargs={'restaurant_id': self.id})
+        return reverse('restaurant-details', kwargs={'restaurant_id': self.id})
 
     class Meta:
         """Display restaurants ordered by name."""
@@ -54,7 +54,7 @@ class Table(models.Model):
         return f'{self.persons}-osobowy'
 
     def get_absolute_url(self):
-        return reverse('restaurant-detail', kwargs={'restaurant_id': self.restaurant.id})
+        return reverse('restaurant-details', kwargs={'restaurant_id': self.restaurant.id})
 
 
 class Meal(models.Model):
@@ -74,7 +74,7 @@ class Meal(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('restaurant-detail', kwargs={'restaurant_id': self.restaurant.id})
+        return reverse('restaurant-details', kwargs={'restaurant_id': self.restaurant.id})
 
 
 class Reservation(models.Model):

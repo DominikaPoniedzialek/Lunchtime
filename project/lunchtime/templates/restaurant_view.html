@@ -12,13 +12,15 @@
         <p>E-mail: {{ restaurant.email }}</p>
         <h3>{{ restaurant.description }}</h3>
 
-        {% if perms.lunchtime.modify_restaurant and perms.lunchtime.delete_restaurant %}
+        {% if perms.lunchtime.change_restaurant %}
             <button><a href="/modify_restaurant/{{ restaurant.id }}/">Modyfikuj</a></button>
+        {% endif %}
+        {% if perms.lunchtime.delete_restaurant %}
             <button><a href="/delete_restaurant/{{ restaurant.id }}/">Usuń</a></button>
         {% endif %}
 
         <h2 class="content-subhead">Menu:</h2>
-        {% if perms.lunchtime_add_meal %}
+        {% if perms.lunchtime.add_meal %}
             <button><a href="{% url 'add-meal' %}">Dodaj posiłek do menu</a></button>
         {% endif %}
 
@@ -70,6 +72,7 @@
             <ul>
         <li>Data: {{ reservation.date }}</li>
         <li>Godzina: {{ reservation.time }}</li>
+        <li>Stolik: {{ reservation.table }}</li>
             </ul>
             </li>
         {% endfor %}

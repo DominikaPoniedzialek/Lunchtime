@@ -34,7 +34,7 @@ urlpatterns = [
     path('add_restaurant/', AddRestaurantView.as_view(), name='add-restaurant'),
     path('modify_restaurant/<int:pk>/', ModifyRestaurantView.as_view(), name='modify-restaurant'),
     path('delete_restaurant/<int:pk>/', DeleteRestaurantView.as_view(), name='delete-restaurant'),
-    path('restaurant/<int:restaurant_id>/', RestaurantView.as_view(), name='restaurant-detail'),
+    path('restaurant/<int:restaurant_id>/', RestaurantView.as_view(), name='restaurant-details'),
     path('add_table/', AddTableView.as_view(), name='add-table'),
     path('delete_table/<int:pk>/', DeleteTableView.as_view(), name='delete-table'),
     path('add_meal/', AddMealView.as_view(), name='add-meal'),
@@ -44,9 +44,11 @@ urlpatterns = [
     path('select_date_time/', SelectDateAndTimeView.as_view(), name='select-date-time'),
     re_path(r'select_restaurant/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/',
             SelectRestaurantView.as_view(), name='select-restaurant'),
-    re_path(r'add_reservation/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/(?P<restaurant_id>\d+)/', AddReservationView.as_view(), name='add-reservation'),
+    re_path(r'add_reservation/(?P<date>[0-9]{4}-?[0-9]{2}-?[0-9]{2})/(?P<time>[0-9]{2}:?[0-9]{2}:?[0-9]{2})/'
+            r'(?P<restaurant_id>\d+)/', AddReservationView.as_view(), name='add-reservation'),
     path('delete_reservation/<int:pk>/', DeleteReservationView.as_view(), name='delete-reservation'),
     path('review_list/', ListReviewsView.as_view(), name='reviews-list'),
     path('add_review/', AddReviewView.as_view(), name='add-review'),
     path('delete_review/<int:pk>/', DeleteReviewView.as_view(), name='delete-review'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
+  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

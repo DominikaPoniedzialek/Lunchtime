@@ -11,7 +11,7 @@
         <ul>
         <li>{{ reservation.date }} - {{ reservation.time }}</li>
         <li>Stolik: {{ reservation.table }}</li>
-        <ul>Danie z menu:
+        <ul>Wybrane z menu:
             {% for meal in reservation.meal.all %}
             <li>{{ meal.name }}</li>
             {% endfor %}

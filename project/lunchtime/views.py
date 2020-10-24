@@ -35,12 +35,13 @@ class AddUserView(FormView):
     success_url = reverse_lazy('main-page')
 
     def form_valid(self, form):
-        User.objects.create_user(username=form.cleaned_data['username'],
-                                 password=form.cleaned_data['password'],
-                                 first_name=form.cleaned_data['first_name'],
-                                 last_name=form.cleaned_data['last_name'],
-                                 email=form.cleaned_data['email'])
-        return super(AddUserView, self).form_valid(form)
+        if form.is_valid():
+            User.objects.create_user(username=form.cleaned_data['username'],
+                                     password=form.cleaned_data['password1'],
+                                     first_name=form.cleaned_data['first_name'],
+                                     last_name=form.cleaned_data['last_name'],
+                                     email=form.cleaned_data['email'])
+            return super(AddUserView, self).form_valid(form)
 
 
 class LoginView(FormView):
@@ -72,6 +73,11 @@ class AddRestaurantView(PermissionRequiredMixin, CreateView):
     model = Restaurant
     fields = ['name', 'address', 'phone', 'email', 'description', 'logo']
     permission_required = 'lunchtime.add_restaurant'
+
+    def form_valid(self, form):
+        """Save data and add review to database."""
+        form.instance.owner = self.request.user
+        return super(AddRestaurantView, self).form_valid(form)
 
 
 class ModifyRestaurantView(PermissionRequiredMixin, UpdateView):
@@ -123,16 +129,13 @@ class AddTableView(PermissionRequiredMixin, CreateView):
     form_class = AddTableForm
     permission_required = 'lunchtime.add_table'
 
-    # def form_valid(self, form):
-    #     Table.objects.create(restaurant=form.cleaned_data['restaurant'], persons=form.cleaned_data['persons'])
-    #     return super(AddTableView, self).form_valid(form)
-
 
 class DeleteTableView(PermissionRequiredMixin, DeleteView):
     """Delete table from database."""
     template_name = 'lunchtime/table_confirm_delete.html'
     model = Table
     permission_required = 'lunchtime.delete_table'
+    success_url = reverse_lazy('restaurants-list')
 
 
 class AddMealView(PermissionRequiredMixin, CreateView):
@@ -152,9 +155,10 @@ class ModifyMealView(PermissionRequiredMixin, UpdateView):
 
 class DeleteMealView(PermissionRequiredMixin, DeleteView):
     """Delete meal from database."""
-    template_name = 'lunchtime/restaurant_confirm_delete.html'
-    model = Restaurant
+    template_name = 'lunchtime/meal_confirm_delete.html'
+    model = Meal
     permission_required = 'lunchtime.delete_meal'
+    success_url = reverse_lazy('restaurants-list')
 
 
 class ListReservationView(LoginRequiredMixin, ListView):
@@ -225,30 +229,6 @@ class AddReservationView(LoginRequiredMixin, View):
         table.reserved = True
         table.save()
         return redirect('/reservation_list')
-
-
-# class AddReservationView(LoginRequiredMixin, CreateView):
-#     # model = Reservation
-#     form_class = AddReservationForm
-#     template_name = 'lunchtime/reservation_form.html'
-#     # fields = ['restaurant', 'table', 'date', 'time', 'meal']
-#     success_url = reverse_lazy('reservations-list')
-#
-#     def form_valid(self, form):
-#         try:
-#             form.instance.user = self.request.user
-#             return super().form_valid(form)
-#         except IntegrityError:
-#             form.add_error('table', 'Stolik jest już zajęty, wybierz inny, lub zmień godzinę')
-#             return self.form_invalid(form)
-
-
-# class ModifyReservationView(LoginRequiredMixin, UpdateView):
-#     """Modify reservation details."""
-#     model = Reservation
-#     fields = ['restaurant', 'table', 'date', 'time', 'meal']
-#     template_name_suffix = '_update_form'
-#     success_url = reverse_lazy('reservations-list')
 
 
 class DeleteReservationView(LoginRequiredMixin, DeleteView):
