@@ -21,7 +21,7 @@ from lunchtime.views import LandingPageView, AddUserView, AddRestaurantView, Mod
     DeleteRestaurantView, RestaurantView, AddTableView, DeleteTableView, AddMealView, ModifyMealView, \
     DeleteMealView, SelectRestaurantView, AddReservationView, ListReservationView, DeleteReservationView, \
     ListReviewsView, AddReviewView, DeleteReviewView, ContactPageView, LoginView, LogoutView, \
-    SelectDateAndTimeView
+    SelectDateAndTimeView, UserRestaurantView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +35,7 @@ urlpatterns = [
     path('modify_restaurant/<int:pk>/', ModifyRestaurantView.as_view(), name='modify-restaurant'),
     path('delete_restaurant/<int:pk>/', DeleteRestaurantView.as_view(), name='delete-restaurant'),
     path('restaurant/<int:restaurant_id>/', RestaurantView.as_view(), name='restaurant-details'),
+    path('user_restaurant/', UserRestaurantView.as_view(), name='user-restaurants'),
     path('add_table/', AddTableView.as_view(), name='add-table'),
     path('delete_table/<int:pk>/', DeleteTableView.as_view(), name='delete-table'),
     path('add_meal/', AddMealView.as_view(), name='add-meal'),

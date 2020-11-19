@@ -53,11 +53,12 @@
                 <p class="pure-menu-item"><a href="{% url 'logout-user' %}" class="pure-menu-link">Wyloguj</a></p>
             {% else %}
                 <p class="pure-menu-item"><a href="{% url 'login-user' %}" class="pure-menu-link">Zaloguj</a></p>
+                <p class="pure-menu-item"><a href="{% url 'add-user' %}" class="pure-menu-link">Załóż konto</a></p>
             {% endif %}
 
-            <p class="pure-menu-item"><a href="{% url 'add-user' %}" class="pure-menu-link">Załóż konto</a></p>
             {% if perms.lunchtime.add_restaurant %}
                 <p class="pure-menu-item"><a href="{% url 'add-restaurant' %}" class="pure-menu-link">Dodaj restaurację</a></p>
+                <p class="pure-menu-item"><a href="{% url 'user-restaurants' %}" class="pure-menu-link">Moje restauracje</a></p>
             {% endif %}
             <p class="pure-menu-item"><a href="{% url 'restaurants-list' %}" class="pure-menu-link">Restauracje</a></p>
             <p class="pure-menu-item"><a href="{% url 'contact' %}" class="pure-menu-link">Kontakt</a></p>

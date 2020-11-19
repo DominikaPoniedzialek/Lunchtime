@@ -102,6 +102,18 @@ class ListRestaurantView(ListView):
     model = Restaurant
 
 
+class UserRestaurantView(PermissionRequiredMixin, ListView):
+    """Display list of user's restaurants."""
+    template_name = 'lunchtime/restaurants_list.html'
+    model = Restaurant
+    permission_required = 'lunchtime.add_restaurant'
+
+    def get_queryset(self):
+        """Return list of user's restaurants."""
+        owner = self.request.user
+        return Restaurant.objects.filter(owner=owner)
+
+
 class RestaurantView(View):
     """Display details about restaurant."""
     template = 'restaurant_view.html'

@@ -22,7 +22,7 @@ class AddUserForm(forms.Form):
                 raise forms.ValidationError("Podana nazwa użytkownika jest już zajęta.")
         return username
 
-    def clean_password1(self):
+    def clean_password2(self):
         """Check if passwords provided by user are the same. Return correct password."""
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
